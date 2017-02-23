@@ -1,0 +1,207 @@
+---
+title: "Neighbr Help"
+author: "Dmitriy Bolotov"
+date: "`r Sys.Date()`"
+output: 
+  # rmarkdown::html_vignette
+  html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Neighbr Help}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+
+## Introduction
+Neighbr is a package for performing k-nearest neighbor classification and regression. 
+Highlights include:
+
+* comparison measures that support continuous or logical features
+* support for categorical and continuous targets
+* neighbor ranking
+
+Neighbr models can also be converted to the PMML (Predictive Model Markup Language) standard using the `pmml` R package.
+
+This vignette provides examples and advice on using the package. 
+
+
+## Examples
+First, load necessary libraries and set the seed and number display options. `knitr::kable` is used to display data frames.
+```{r load_packages}
+library(neighbr)
+library(knitr)
+set.seed(123)
+options(digits=3)
+```
+
+
+### Continuous features and categorical target
+This example shows using squared euclidean distance with 3 neighbors to classify the Species of flowers in the `iris` dataset. Each training instance consists of 4 features and 1 class variable. The categorical target is predicted by a majority vote from the closest `k` neighbors. The `knn()` function requires that all columns in `test_set` are feature columns, and have the same names and are in the same order as the features in `train_set`. The `train_set` is assumed to only contain features and targets (one categorical, one continuous, and/or ID for neighbor ranking); i.e., if a column name is not specified as a target, it is assumed to be a feature. The `fit` object contains predictions for `test_set` in `fit$test_set_scores` (there is no `predict` method for `knn`).
+
+```{r iris_categorical_target_example}
+data(iris)
+train_set <- iris[1:147,] #train set contains all targets and features
+test_set <- iris[148:150,!names(iris) %in% c("Species")] #test set does not contain any targets
+
+#run knn function
+fit <- knn(train_set=train_set,test_set=test_set,
+            k=3,
+            categorical_target="Species",
+            comparison_measure="squared_euclidean")
+
+#show predictions
+kable(fit$test_set_scores)
+```
+
+The returned data frame contains predictions for the categorical target (Species).
+
+
+### Mixed targets and neighbor ranking 
+It is possible to predict categorical and continuous targets simultaneously, as well as to return the IDs of closest neighbors of a given instance. In the next example, an ID column is added to the data for ranking, and `Petal.Width` is used as a continuous target. By default, the prediction for the continuous target is calculated by averaging the closest `k` neighbors.
+
+```{r iris_mixed_targets_clustering_example}
+data(iris)
+iris$ID <- c(1:150) #an ID column is necessary if ranks are to be calculated
+train_set <- iris[1:147,] #train set contains all predicted variables, features, and ID column
+test_set <- iris[148:150,!names(iris) %in% c("Petal.Width","Species","ID")] #test set does not contain predicted variables or ID column
+
+fit <- knn(train_set=train_set,test_set=test_set,
+            k=3,
+            categorical_target="Species",
+            continuous_target= "Petal.Width",
+            comparison_measure="squared_euclidean",
+            return_ranked_neighbors=3,
+            id="ID")
+
+kable(fit$test_set_scores)
+```
+
+The ranked neighbor IDs are returned along with the categorical and continuous targets, with `neghbor1` being the closest in terms of distance. If a similarity measure were being used, `neighbor1` would be the most similar. Any number of neighbors can be returned, as long as `return_ranked_neighbors <= k`.
+
+
+### Neighbor ranking without targets
+It is possible to get neighbor ranks without a target variable. In this unsupervised learning case, `continuous_target` and `categorical_target` are left as `NULL` by default.
+
+```{r iris_clustering_example}
+data(iris)
+iris$ID <- c(1:150) #an ID column is necessary if ranks are to be calculated
+train_set <- iris[1:147,-c(5)] #remove `Species` categorical variable
+test_set <- iris[148:150,!names(iris) %in% c("Species","ID")] #test set does not contain predicted variables or ID column
+
+fit <- knn(train_set=train_set,test_set=test_set,
+            k=5,
+            comparison_measure="squared_euclidean",
+            return_ranked_neighbors=4,
+            id="ID")
+
+kable(fit$test_set_scores)
+```
+
+
+### Logical features
+The package supports logical features, to be used with an appropriate similarity measure. This example demonstrates predicting a categorical target and ranking neighbors for the `HouseVotes84` dataset (from the `mlbench` package). The features may be logical consisting of `{TRUE, FALSE}` or numeric vectors consisting of `{0,1}`, but not factors. In this example, the factor features are converted to numeric vectors.
+
+```{r logical_features_example}
+library(mlbench)
+data(HouseVotes84)
+dat <- HouseVotes84[complete.cases(HouseVotes84),] # remove any rows with N/A elements
+
+# change all {yes,no} factors to {0,1}
+feature_names <- names(dat)[!names(dat) %in% c("Class","ID")]
+for (n in feature_names) {
+  levels(dat[,n])[levels(dat[,n])=="n"] <- 0
+  levels(dat[,n])[levels(dat[,n])=="y"] <- 1
+}
+
+# change factors to numeric
+for (n in feature_names) {dat[,n] <- as.numeric(levels(dat[,n]))[dat[,n]]}
+
+dat$ID <- c(1:nrow(dat)) #an ID column is necessary if ranks are to be calculated
+
+train_set <- dat[1:225,]
+test_set <- dat[226:232,!names(dat) %in% c("Class","ID")] #test set does not contain predicted variables or ID column
+
+fit <- knn(train_set=train_set,test_set=test_set,
+            k=7,
+            categorical_target = "Class",
+            comparison_measure="jaccard",
+            return_ranked_neighbors=3,
+            id="ID")
+
+kable(fit$test_set_scores)
+```
+
+
+
+## Additional Information
+
+
+### Categorical features
+Categorical features are not directly supported: categorical numeric features are assumed to be continuous, and if `comparison_measure` is a similarity measure, only logical features are allowed. However, categorical features may be transformed into the required form with one-hot encoding (for example, using the `dummies` package).
+
+The algorithm will not work for a dataset with a mix of categorical and continuous features as-is: all features must be either logical, or continuous.
+
+
+### Comparison measures
+Distance measures are used for vectors with continuous elements. Similarity measures are used for logical vectors. The comparison measures used in `neighbr` are based on those defined in the [PMML standard](http://dmg.org/pmml/v4-3/KNN.html).
+
+Functions in `neighbr` can be used to calculate distances or similarities between vectors directly:
+```{r}
+distance(c(1,2,3),c(2,3,4),"squared_euclidean")
+similarity(c(0,1,0,0),c(1,1,1,0),"simple_matching")
+```
+
+The next two sections show the formulas used in measure calculation.
+
+
+#### Distance
+For two vectors $x$ and $y$ of length $n$, distances are calculated as follows:
+
+* Euclidean: $(\sum_{i=0}^{n}(x_i - y_i)^2)^{1/2}$
+
+* Squared euclidean: $\sum_{i=0}^{n}(x_i - y_i)^2$
+
+
+#### Similarity 
+For two vectors $x$ and $y$ of length $n$, let:
+
+* ${a_{11}}$ = number of times where $x_i=1$ and $y_i=1$
+* ${a_{10}}$ = number of times where $x_i=1$ and $y_i=0$
+* ${a_{01}}$ = number of times where $x_i=0$ and $y_i=1$
+* ${a_{00}}$ = number of times where $x_i=0$ and $y_i=0$
+
+Then, similarities are calculated as follows:
+
+* Simple matching: $(a_{11} + a_{00}) / (a_{11} + a_{10} + a_{01} + a_{00})$
+
+* Jaccard: $(a_{11}) / (a_{11} + a_{10} + a_{01})$
+
+* Tanimoto: $(a_{11} + a_{00}) / (a_{11} + 2 * (a_{10} + a_{01}) + a_{00})$
+
+
+### Ties
+When two (or more) training instances are the same distance from a test instance, a tie occurs. In this case, the training example that appears first in `train_set` will be first in the list of nearest neighbors. If ranked neighbors are being output, that training example will be assigned the lower rank.
+
+
+For categorical targets, a tie occurs when two (or more) training instances have the same class (regardless of distance or similarity), and no single class has the highest frequency of occurence in a majority vote among `k` neighbors. In this case, the tie breaking procedure follows the PMML specification:
+
+>In case of a tie, the category with the largest number of cases in the training data is the winner. If multiple categories are tied on the largest number of cases in the training data, then the category with the smallest data value (in lexical order) among the tied categories is the winner.
+
+
+### Missing data
+The package does not directly support missing data. Various imputation techniques may be used (e.g., average for continuous features), or rows with N/A may be deleted, before being passed to `knn()`.
+
+
+### Neighbr and PMML
+This package was developed following the KNN specification in the PMML (Predictive Model Markup Language) standard. The models produced by `neighbr` can be converted to PMML (using the `pmml` R package). 
+
+Some parts of the package are only used for conversion to PMML. For example, the `function_name` field returned by `knn()` corresponds to a field required by PMML.
+
+
+## References
+- [Nearest neighbor specification for PMML](http://dmg.org/pmml/v4-3/KNN.html)
