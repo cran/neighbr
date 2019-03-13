@@ -1,6 +1,7 @@
 context("knn function")
 
 test_that("knn with jaccard object contains expected items - 1", {
+  suppressWarnings(RNGversion("3.5.0"))
   set.seed(456)
   n_dat_rows <- 10
   feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
