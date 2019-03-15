@@ -1,6 +1,6 @@
 Package: neighbr
 Title: Classification, Regression, Clustering with K Nearest Neighbors
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(
 			person("Dmitriy", "Bolotov", email = "dmitriy.bolotov@softwareag.com", role = c("aut", "cre")),
 			person("Zementis Inc",role="cph")
@@ -17,9 +17,9 @@ Suggests: testthat, knitr, rmarkdown, mlbench
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2019-03-13 19:53:05 UTC; dmitriy
+Packaged: 2019-03-15 21:37:01 UTC; dmitriy
 Author: Dmitriy Bolotov [aut, cre],
   Zementis Inc [cph]
 Maintainer: Dmitriy Bolotov <dmitriy.bolotov@softwareag.com>
 Repository: CRAN
-Date/Publication: 2019-03-13 20:10:03 UTC
+Date/Publication: 2019-03-15 23:20:06 UTC

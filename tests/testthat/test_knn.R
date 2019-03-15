@@ -1,14 +1,17 @@
 context("knn function")
 
 test_that("knn with jaccard object contains expected items - 1", {
-  suppressWarnings(RNGversion("3.5.0"))
+
   set.seed(456)
   n_dat_rows <- 10
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat3 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  cat_tar <- sample(x=c("red","green","orange"),size=n_dat_rows,replace=TRUE)
-  cont_tar <- runif(n_dat_rows)
+
+  feat1 <- c(0,0,1,1,1,0,0,0,0,0)
+  feat2 <- c(0,0,1,1,1,1,1,0,1,0)
+  feat3 <- c(0,1,1,0,1,1,1,1,0,0)
+  cat_tar <- c("orange","red","orange","green","green","orange","orange","orange","orange","green")
+  cont_tar <- c(0.31753470,0.42369873,0.04296139,0.12927385,0.07681441,
+                0.07841957,0.58247762,0.54410322,0.48570649,0.92824613)
+  
   ID <- c(1:n_dat_rows)
   
   dat <- data.frame(feat1,feat2,feat3,cat_tar,cont_tar,ID)
@@ -51,14 +54,18 @@ test_that("knn with jaccard object contains expected items - 1", {
 })
 
 test_that("knn with jaccard object contains expected items - 2", {
-  # skip("skipping test")
+
   set.seed(123)
   n_dat_rows <- 10
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat3 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  cat_tar <- sample(x=c("red","green","blue"),size=n_dat_rows,replace=TRUE)
-  cont_tar <- runif(n_dat_rows)
+
+  feat1 <- c(0,1,0,1,1,0,1,1,1,0)
+  feat2 <- c(1,0,1,1,0,1,0,0,0,1)
+  feat3 <- c(1,1,1,1,1,1,1,1,0,0)
+  cat_tar <- c("blue","blue","blue","blue","red","green","blue","red","red","red")
+  cont_tar <- c(0.1428000,0.4145463,0.4137243,0.3688455,0.1524447,
+                0.1388061,0.2330341,0.4659625,0.2659726,0.8578277)
+  
+  
   ID <- c(1:n_dat_rows)
 
   # dat <- data.frame(feat1,feat2,feat3,ID)
@@ -88,8 +95,18 @@ test_that("knn with jaccard object contains expected items - 2", {
 test_that("knn euclidean clustering object contains expected items", {
   set.seed(334455)
   n_dat_rows <- 27
-  feat1 <- runif(n_dat_rows)
-  feat2 <- runif(n_dat_rows)
+  
+  feat1 <- c(0.92455564,0.74938855,0.80555177,0.60259363,0.82257151,0.11199052,
+             0.90359708,0.37341714,0.26986599,0.93062594,0.67182929,0.35344112,
+             0.79498825,0.10744474,0.49529769,0.27766731,0.69180392,0.10796525,
+             0.85859162,0.89878006,0.86419524,0.55533624,0.51522158,0.62078923,
+             0.65602609,0.82661748,0.03848525)
+  feat2 <- c(0.54420303,0.78990096,0.17005190,0.83872097,0.88093331,0.41242678,
+             0.58231761,0.86189998,0.95442618,0.13474694,0.83608545,0.86419985,
+             0.50778279,0.07543578,0.70951347,0.03377456,0.93787590,0.98786686,
+             0.95397011,0.99186118,0.84321269,0.74014652,0.69499037,0.16801342,
+             0.56200532,0.40281416,0.72523906)
+  
   the_id_variable <- c(1:n_dat_rows)
   
   dat <- data.frame(feat1,feat2,the_id_variable)

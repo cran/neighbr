@@ -1,7 +1,7 @@
 context("knn function input check")
 
 test_that("error when input data is not data frame", {
-  
+
   set.seed(564898)
   feat1 <- c(3.3,0.1,2.3)
   cat_tar <- c("a","b","a")
@@ -54,13 +54,15 @@ test_that("error when input data has NA elements", {
 
 
 test_that("error when a specified target is not present in train_set", {
+
   set.seed(321)
 
   n_dat_rows <- 7
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  cat_tar <- sample(x=c("red","green","blue"),size=n_dat_rows,replace=TRUE)
-  cont_tar <- runif(n_dat_rows)
+  feat1 <- c(1,1,0,0,0,0,0)
+  feat2 <- c(0,0,1,1,0,1,0)
+  cat_tar <- c("green","red","green","green","red","green","green")
+  cont_tar <- c(0.9898785,0.9311740,0.4855048,0.5746893,0.7512382,0.9927224,0.4308644)
+  
   ID <- c(1:n_dat_rows)
 
   dat <- data.frame(feat1,feat2,cat_tar,cont_tar,ID)
@@ -79,15 +81,16 @@ test_that("error when a specified target is not present in train_set", {
 
 
 test_that("error when features in train_set and test_set are not in same order",{
-  # skip("skip test")
 
   set.seed(5745)
 
   n_dat_rows <- 7
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  cat_tar <- sample(x=c("red","green","blue"),size=n_dat_rows,replace=TRUE)
-  cont_tar <- runif(n_dat_rows)
+  
+  feat1 <- c(0,0,0,1,0,1,1)
+  feat2 <- c(1,1,1,0,1,0,0)
+  cat_tar <- c("red","blue","blue","green","red","blue","green")
+  cont_tar <- c(0.6081487,0.5659303,0.1393931,0.5678338,0.1878581,0.5548865,0.1013847)
+  
   ID <- c(1:n_dat_rows)
 
   dat <- data.frame(feat1,feat2,cat_tar,cont_tar,ID)
@@ -106,16 +109,17 @@ test_that("error when features in train_set and test_set are not in same order",
 
 
 test_that("error when some features in train_set are not included in test_set",{
-  # skip("skip_test")
 
   set.seed(545)
 
   n_dat_rows <- 9
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat3 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  cat_tar <- sample(x=c("red","green","blue"),size=n_dat_rows,replace=TRUE)
-  cont_tar <- runif(n_dat_rows)
+
+  feat1 <- c(1,1,1,0,0,1,0,0,0)
+  feat2 <- c(1,0,1,1,1,1,1,0,1)
+  feat3 <- c(1,0,0,1,0,0,1,1,1)
+  cat_tar <- c("red","green","blue","green","green","green","green","red","red")
+  cont_tar <- c(0.9200511,0.8416001,0.8538682,0.3471011,0.7454319,0.7817555,0.6176841,0.8104446,0.7499481)
+  
   ID <- c(1:n_dat_rows)
 
   dat <- data.frame(feat1,feat2,feat3,cat_tar,cont_tar,ID)
@@ -134,14 +138,15 @@ test_that("error when some features in train_set are not included in test_set",{
 
 
 test_that("error when return_ranked_neighbors is non-zero and id is not specified",{
+
   set.seed(5451)
-
   n_dat_rows <- 5
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  cat_tar <- sample(x=c("red","green","blue"),size=n_dat_rows,replace=TRUE)
-  cont_tar <- runif(n_dat_rows)
 
+  feat1 <- c(0,1,1,1,0)
+  feat2 <- c(0,0,1,0,0)
+  cat_tar <- c("green","red","blue","blue","red")
+  cont_tar <- c(0.2515468,0.6100825,0.2753270,0.3780903,0.9969264)
+  
   dat <- data.frame(feat1,feat2,cat_tar,cont_tar)
 
   train_set <- dat[1:(n_dat_rows-2),]
@@ -158,12 +163,12 @@ test_that("error when return_ranked_neighbors is non-zero and id is not specifie
 
 test_that("error when id return_ranked_neighbors is less than zero",{
   set.seed(1111)
-
   n_dat_rows <- 5
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  cat_tar <- sample(x=c("red","green","blue"),size=n_dat_rows,replace=TRUE)
-  cont_tar <- runif(n_dat_rows)
+  
+  feat1 <- c(0,1,1,1,0)
+  feat2 <- c(0,0,1,0,0)
+  cat_tar <- c("green","red","blue","blue","red")
+  cont_tar <- c(0.2515468,0.6100825,0.2753270,0.3780903,0.9969264)
 
   dat <- data.frame(feat1,feat2,cat_tar,cont_tar)
 
@@ -183,9 +188,9 @@ test_that("error when target is not specified and return_ranked_neighbors is not
   set.seed(5678545)
 
   n_dat_rows <- 9
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat3 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
+  feat1 <- c(1,1,1,0,0,1,0,0,0)
+  feat2 <- c(1,0,1,1,1,1,1,0,1)
+  feat3 <- c(1,0,0,1,0,0,1,1,1)
   ID <- c(1:n_dat_rows)
 
   dat <- data.frame(feat1,feat2,feat3,ID)
@@ -205,9 +210,9 @@ test_that("error when ID in train_set is not unique",{
   set.seed(7105)
 
   n_dat_rows <- 7
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  ID <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
+  feat1 <- c(0,0,1,1,0,0,1)
+  feat2 <- c(0,0,1,1,1,0,1)
+  ID <- c(1,1,1,0,1,1,1)
 
   dat <- data.frame(feat1,feat2,ID)
 
@@ -226,8 +231,8 @@ test_that("error if return_ranked_neighbors <= k",{
   set.seed(112233)
 
   n_dat_rows <- 5
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
+  feat1 <- c(0,1,1,1,0)
+  feat2 <- c(0,0,1,0,0)
   ID <- c(1:n_dat_rows)
 
   dat <- data.frame(feat1,feat2,ID)
@@ -252,8 +257,8 @@ test_that("error if categorical scoring method is not allowed",{
   set.seed(2323211)
 
   n_dat_rows <- 9
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
+  feat1 <- c(1,1,1,0,0,1,0,0,0)
+  feat2 <- c(1,0,1,1,1,1,1,0,1)
   ID <- c(1:n_dat_rows)
 
   dat <- data.frame(feat1,feat2,ID)
@@ -274,8 +279,8 @@ test_that("error if continuous scoring method is not allowed",{
   set.seed(2423211)
 
   n_dat_rows <- 9
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
+  feat1 <- c(1,1,1,0,0,1,0,0,0)
+  feat2 <- c(1,0,1,1,1,1,1,0,1)
   ID <- c(1:n_dat_rows)
 
   dat <- data.frame(feat1,feat2,ID)
@@ -314,8 +319,8 @@ test_that("error if train_set or test_set features contain factors",{
   set.seed(3030)
 
   n_dat_rows <- 9
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
+  feat1 <- c(1,1,1,0,0,1,0,0,0)
+  feat2 <- c(1,0,1,1,1,1,1,0,1)
   ID <- c(1:n_dat_rows)
 
   dat <- data.frame(feat1,feat2,ID)
@@ -348,8 +353,8 @@ test_that("error if comparison measure is similarity and all train_set features 
   set.seed(24991)
 
   n_dat_rows <- 9
-  feat1 <- sample(x=c(0,1,2,3),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
+  feat1 <- c(0,2,2,3,1,2,1,1,2)
+  feat2 <- c(0,1,0,1,1,1,0,0,1)
   ID <- c(1:n_dat_rows)
 
   dat <- data.frame(feat1,feat2,ID)
@@ -369,8 +374,8 @@ test_that("error if comparison measure is similarity and all test_set features a
   set.seed(24091)
 
   n_dat_rows <- 9
-  feat1 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(0,1),size=n_dat_rows,replace=TRUE)
+  feat1 <- c(1,1,1,0,0,1,0,0,0)
+  feat2 <- c(1,0,1,1,1,1,1,0,1)
   ID <- c(1:n_dat_rows)
 
   dat <- data.frame(feat1,feat2,ID)
@@ -392,8 +397,8 @@ test_that("no error when input features are logical", {
   set.seed(2403317)
   
   n_dat_rows <- 9
-  feat1 <- sample(x=c(TRUE,FALSE),size=n_dat_rows,replace=TRUE)
-  feat2 <- sample(x=c(TRUE,FALSE),size=n_dat_rows,replace=TRUE)
+  feat1 <- c(TRUE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,TRUE,FALSE)
+  feat2 <- c(TRUE,TRUE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE)
   ID <- c(1:n_dat_rows)
   
   dat <- data.frame(feat1,feat2,ID)
