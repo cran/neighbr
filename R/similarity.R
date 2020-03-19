@@ -1,12 +1,14 @@
 # Neighbr
 #
-# Copyright (c) 2017 Zementis, Inc. 
+# Copyright (c) 2017-2020, Software AG, Darmstadt, Germany and/or Software AG
+# USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates
+# and/or their licensors.
 #
 # This file is part of the Neighbr package for R.
 #
-# The Neighbr package is free software: you can redistribute it and/or 
+# The Neighbr package is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation, either version 2 of 
+# published by the Free Software Foundation, either version 2 of
 # the License, or (at your option) any later version.
 #
 # The Neighbr package is distributed in the hope that it will be useful,
@@ -21,8 +23,8 @@
 #' @param x,y Logical or numeric vectors.
 #' @param measure Similarity measure ("simple_matching", "jaccard", or "tanimoto")
 #' @return The similarity between \code{x} and \code{y}.
-#' @details Input vectors must consist of logical or numeric elements TRUE,FALSE or 0,1 
-#' (not factors). Similarity measures in this package are based on those defined in 
+#' @details Input vectors must consist of logical or numeric elements TRUE,FALSE or 0,1
+#' (not factors). Similarity measures in this package are based on those defined in
 #' the \href{http://dmg.org/pmml/v4-2-1/ClusteringModel.html#xsdElement_ComparisonMeasure}{PMML specification}.
 #' Similarity ranges from 0 (no similarity) to 1 (identical).
 #'

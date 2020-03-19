@@ -1,12 +1,14 @@
 # Neighbr
 #
-# Copyright (c) 2017 Zementis, Inc. 
+# Copyright (c) 2017-2020, Software AG, Darmstadt, Germany and/or Software AG
+# USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates
+# and/or their licensors.
 #
 # This file is part of the Neighbr package for R.
 #
-# The Neighbr package is free software: you can redistribute it and/or 
+# The Neighbr package is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation, either version 2 of 
+# published by the Free Software Foundation, either version 2 of
 # the License, or (at your option) any later version.
 #
 # The Neighbr package is distributed in the hope that it will be useful,
@@ -33,7 +35,7 @@ allowed_similarity_measures <- c("simple_matching", "jaccard","tanimoto") #TODO:
   comparison_measure_function <- get(paste0(".",comparison_measure))
 
   train_set <- train_set[,!names(train_set) %in% targets_list,drop=FALSE] #replaces line 20 in loop below
-  
+
   for(i in 1:nrow(train_set)) {
     row <- train_set[i,]
     return_table$measure[i] <- comparison_measure_function(row,test_set_row)
@@ -52,25 +54,25 @@ allowed_similarity_measures <- c("simple_matching", "jaccard","tanimoto") #TODO:
 # faster apply version of function
 .compute_distance_to_train <- function(test_set_row,train_set,num_train_rows,k,categorical_target,
                                        continuous_target,id,targets_list,comparison_measure) {
-  
+
   return_table <- train_set[,names(train_set) %in% targets_list,drop=FALSE]
-  
+
   return_table$measure <- rep(-1,num_train_rows)
-  
+
   comparison_measure_function <- get(paste0(".",comparison_measure))
-  
+
   train_set <- train_set[,!names(train_set) %in% targets_list,drop=FALSE] #replaces line 20 in loop below
-  
+
   res <- apply(train_set,1,function(x) {comparison_measure_function(x,test_set_row)})
   return_table$measure <- res
-  
-  
+
+
   # if comparison_measure is used for distance (and not similarity), set decr_flag to FALSE for sorting
   if(comparison_measure %in% allowed_distance_measures) {decr_flag=FALSE} else {decr_flag=TRUE}
-  
+
   return_table_ordered <- return_table[order(return_table$measure,decreasing=decr_flag),]
   return_table_ordered <- return_table_ordered[1:k,] #only return k neighbors
-  
+
   return(return_table_ordered)
 }
 

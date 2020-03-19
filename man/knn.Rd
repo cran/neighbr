@@ -4,11 +4,18 @@
 \alias{knn}
 \title{Classification, regression, and clustering with k nearest neighbors.}
 \usage{
-knn(train_set, test_set, k = 3, categorical_target = NULL,
-  continuous_target = NULL, comparison_measure,
+knn(
+  train_set,
+  test_set,
+  k = 3,
+  categorical_target = NULL,
+  continuous_target = NULL,
+  comparison_measure,
   categorical_scoring_method = "majority_vote",
-  continuous_scoring_method = "average", return_ranked_neighbors = 0,
-  id = NULL)
+  continuous_scoring_method = "average",
+  return_ranked_neighbors = 0,
+  id = NULL
+)
 }
 \arguments{
 \item{train_set}{Data frame containing the training instances, with features

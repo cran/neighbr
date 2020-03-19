@@ -1,13 +1,13 @@
-## ---- echo=FALSE---------------------------------------------------------
+## ---- echo=FALSE--------------------------------------------------------------
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
-## ----load_packages-------------------------------------------------------
+## ----load_packages------------------------------------------------------------
 library(neighbr)
 library(knitr)
 set.seed(123)
 options(digits=3)
 
-## ----iris_categorical_target_example-------------------------------------
+## ----iris_categorical_target_example------------------------------------------
 data(iris)
 train_set <- iris[1:147,] #train set contains all targets and features
 test_set <- iris[148:150,!names(iris) %in% c("Species")] #test set does not contain any targets
@@ -21,7 +21,7 @@ fit <- knn(train_set=train_set,test_set=test_set,
 #show predictions
 kable(fit$test_set_scores)
 
-## ----iris_mixed_targets_clustering_example-------------------------------
+## ----iris_mixed_targets_clustering_example------------------------------------
 data(iris)
 iris$ID <- c(1:150) #an ID column is necessary if ranks are to be calculated
 train_set <- iris[1:147,] #train set contains all predicted variables, features, and ID column
@@ -37,7 +37,7 @@ fit <- knn(train_set=train_set,test_set=test_set,
 
 kable(fit$test_set_scores)
 
-## ----iris_clustering_example---------------------------------------------
+## ----iris_clustering_example--------------------------------------------------
 data(iris)
 iris$ID <- c(1:150) #an ID column is necessary if ranks are to be calculated
 train_set <- iris[1:147,-c(5)] #remove `Species` categorical variable
@@ -51,7 +51,7 @@ fit <- knn(train_set=train_set,test_set=test_set,
 
 kable(fit$test_set_scores)
 
-## ----logical_features_example--------------------------------------------
+## ----logical_features_example-------------------------------------------------
 library(mlbench)
 data(HouseVotes84)
 dat <- HouseVotes84[complete.cases(HouseVotes84),] # remove any rows with N/A elements
@@ -80,7 +80,7 @@ fit <- knn(train_set=train_set,test_set=test_set,
 
 kable(fit$test_set_scores)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 distance(c(1,2,3),c(2,3,4),"squared_euclidean")
 similarity(c(0,1,0,0),c(1,1,1,0),"simple_matching")
 

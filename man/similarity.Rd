@@ -18,8 +18,8 @@ The similarity between \code{x} and \code{y}.
 Calculate the similarity between two vectors of logicals.
 }
 \details{
-Input vectors must consist of logical or numeric elements TRUE,FALSE or 0,1 
-(not factors). Similarity measures in this package are based on those defined in 
+Input vectors must consist of logical or numeric elements TRUE,FALSE or 0,1
+(not factors). Similarity measures in this package are based on those defined in
 the \href{http://dmg.org/pmml/v4-2-1/ClusteringModel.html#xsdElement_ComparisonMeasure}{PMML specification}.
 Similarity ranges from 0 (no similarity) to 1 (identical).
 

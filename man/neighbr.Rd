@@ -3,7 +3,6 @@
 \docType{package}
 \name{neighbr}
 \alias{neighbr}
-\alias{neighbr-package}
 \title{neighbr: A package for computing nearest neighbors.}
 \description{
 Classification, regression, and clustering with k nearest neighbors.

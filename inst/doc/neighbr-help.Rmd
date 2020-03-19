@@ -1,7 +1,5 @@
 ---
 title: "Neighbr Help"
-author: "Dmitriy Bolotov"
-date: "`r Sys.Date()`"
 output: 
   # rmarkdown::html_vignette
   html_document:
@@ -188,7 +186,7 @@ Then, similarities are calculated as follows:
 When two (or more) training instances are the same distance from a test instance, a tie occurs. In this case, the training example that appears first in `train_set` will be first in the list of nearest neighbors. If ranked neighbors are being output, that training example will be assigned the lower rank.
 
 
-For categorical targets, a tie occurs when two (or more) training instances have the same class (regardless of distance or similarity), and no single class has the highest frequency of occurence in a majority vote among `k` neighbors. In this case, the tie breaking procedure follows the PMML specification:
+For categorical targets, a tie occurs when two (or more) training instances have the same class (regardless of distance or similarity), and no single class has the highest frequency of occurrence in a majority vote among `k` neighbors. In this case, the tie breaking procedure follows the PMML specification:
 
 >In case of a tie, the category with the largest number of cases in the training data is the winner. If multiple categories are tied on the largest number of cases in the training data, then the category with the smallest data value (in lexical order) among the tied categories is the winner.
 

@@ -1,12 +1,14 @@
 # Neighbr
 #
-# Copyright (c) 2017 Zementis, Inc. 
+# Copyright (c) 2017-2020, Software AG, Darmstadt, Germany and/or Software AG
+# USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates
+# and/or their licensors.
 #
 # This file is part of the Neighbr package for R.
 #
-# The Neighbr package is free software: you can redistribute it and/or 
+# The Neighbr package is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation, either version 2 of 
+# published by the Free Software Foundation, either version 2 of
 # the License, or (at your option) any later version.
 #
 # The Neighbr package is distributed in the hope that it will be useful,
@@ -64,7 +66,7 @@
 #' There is no \code{predict} method for \code{knn}. The scored test set is returned
 #' as part of the \code{neighbr} object. The data to be scored must be passed in
 #' with the training data to \code{knn()}.
-#' 
+#'
 #' Supported distance measures (used with continuous features): euclidean, squared_euclidean.
 #'
 #' Supported similarity measures (used with logical features): simple_matching, jaccard, tanimoto.
@@ -75,7 +77,7 @@
 #' Logical features must consist of 0,1 or TRUE,FALSE values.
 #'
 #' Categorical non-logical features must be transformed before being used.
-#' 
+#'
 #' The categorical target does not have to be of factor class, but is assumed to be not continuous.
 #'
 #' The distance and similarity measures in this package are based on those
@@ -89,22 +91,22 @@
 #' For more details and examples, see the vignette by running the following:
 #'
 #' \code{vignette("neighbr-help")}
-#' 
+#'
 #' @examples
 #' # continuous features with continuous target, categorical target,
 #' # and neighbor ranking
-#' 
+#'
 #' data(iris)
-#' 
+#'
 #' # add an ID column to the data for neighbor ranking
 #' iris$ID <- c(1:150)
-#' 
+#'
 #' # train set contains all predicted variables, features, and ID column
 #' train_set <- iris[1:145,]
-#' 
+#'
 #' # omit predicted variables or ID column from test set
 #' test_set <- iris[146:150,-c(4,5,6)]
-#' 
+#'
 #' fit <- knn(train_set=train_set,test_set=test_set,
 #'            k=5,
 #'            categorical_target="Species",
@@ -132,8 +134,8 @@ knn <- function(train_set,test_set,
   # check for data frames
   if ((!is.data.frame(train_set)) | (!is.data.frame(test_set))) {
     stop("train_set and test_set must be data frames")
-  }  
-  
+  }
+
   # check for missing data
   if (anyNA(train_set) | anyNA(test_set)) {
     stop("missing values not allowed in train_test or test_set")
@@ -216,7 +218,7 @@ knn <- function(train_set,test_set,
   } else if (!is.null(categorical_target)) {
     function_name <- "classification"
     categorical_levels <- levels(train_set[,categorical_target])
-  } else if (!is.null(continuous_target)) {    
+  } else if (!is.null(continuous_target)) {
     function_name <- "regression"
   } else if (is.null(categorical_target) & is.null(continuous_target)) {
     function_name <- "clustering"
@@ -232,8 +234,8 @@ knn <- function(train_set,test_set,
 
   if(!is.null(categorical_target)) { test_set_scores$categorical_target <- rep(-99, num_test_rows) } # add a categorical_target column with dummy vals
   if(!is.null(continuous_target)) { test_set_scores$continuous_target <- rep(-99, num_test_rows) } # add a continuous_target column with dummy vals
-  
-  
+
+
   if(return_ranked_neighbors>0) {
     ranked_neighbors_names <- paste("neighbor", c(1:return_ranked_neighbors), sep="")
     ranks_df <- data.frame(matrix(vector(), num_test_rows, return_ranked_neighbors, dimnames=list(c(), ranked_neighbors_names)), stringsAsFactors=F)
@@ -242,9 +244,9 @@ knn <- function(train_set,test_set,
 
   # make predictions for every row in test_set
   for (i in 1:num_test_rows) {
-    
-    # .print_progress(i,num_test_rows,5) #print progress 
-    
+
+    # .print_progress(i,num_test_rows,5) #print progress
+
     test_set_row <- test_set[i,]
 
     distances <- .compute_distance_to_train(test_set_row, train_set, num_train_rows, k=k,
@@ -275,7 +277,7 @@ knn <- function(train_set,test_set,
   }
 
   call <- match.call()
-  
+
   # create the return object
   return_obj <- list(call=call,
                      k=k,
